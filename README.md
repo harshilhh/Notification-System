@@ -1,6 +1,19 @@
 # Notification System for Task Deadlines
 
-This project is a Flask-based notification system that sends task reminders using Celery and Twilio. It integrates Redis for task queues and PostgreSQL for database management.
+![alt text]({E3F4EDAE-FDBB-43A5-AF5D-2EFE36E141B8}.png)
+
+This system is built using Flask, Celery, Redis, PostgreSQL, and Twilio. It is designed to manage user tasks, send notifications (via SMS and WhatsApp) for approaching task deadlines, and provide users with scheduled reminders.
+
+## Key Features:
+
+- **Task Management**: Allows users to create, track, and manage tasks.
+- **Asynchronous Task Processing**: **Celery** is used to handle background task execution for improved performance.
+- **Notifications**: Sends notifications (SMS and WhatsApp) to users about task deadlines using **Twilio**.
+- **Bulk Notifications**: Supports sending bulk notifications that allowing efficient mass communication.
+- **Scheduled Reminders**: Reminds users about their tasks on a predefined schedule using **cron jobs**.
+- **Message Broker**: **Redis** is used as a message broker to facilitate communication between the components.
+- **Database**: **PostgreSQL** is used to store user and task data.
+
 
 ## Setup Instructions
 
@@ -9,27 +22,27 @@ Create a `.env` file in the root directory and add the following configuration:
 
 #### Redis Configuration
 ```
-REDIS_PASSWORD=maisha123
-REDIS_HOST=localhost
-REDIS_PORT=6379
+REDIS_PASSWORD=<your-radis-password>
+REDIS_HOST=<redis-host>
+REDIS_PORT=<redis-port>
 REDIS_DB=0
 ```
 
 #### PostgreSQL Configuration
 ```
-POSTGRES_USER=testing_owner
-POSTGRES_PASSWORD=kUx9pEc6CIPn
-POSTGRES_HOST=ep-lucky-base-a1q3quci.ap-southeast-1.aws.neon.tech
-POSTGRES_PORT=5432
-POSTGRES_DB=testing
+POSTGRES_USER=<postgres-username>
+POSTGRES_PASSWORD=<your-postgres-password>
+POSTGRES_HOST=<your-postgres-host>
+POSTGRES_PORT=<postgres-port>
+POSTGRES_DB=<your-db-name>
 ```
 
 #### Twilio Configuration
 ```
 TWILIO_ACCOUNT_SID=<your-account-sid>
 TWILIO_AUTH_TOKEN=<your-auth-token>
-TWILIO_PHONE_NUMBER=+18133363271
-TWILIO_WHATSAPP_NUMBER=+14155238886
+TWILIO_PHONE_NUMBER=<sms-number>
+TWILIO_WHATSAPP_NUMBER=<whatsapp-number>
 ```
 
 ### 2. Create a Virtual Environment and Install Requirements
@@ -59,27 +72,20 @@ In the first terminal, run the Flask application:
 python3 run.py
 ```
 
-### 4. Create the Database Tables
-Send a `POST` request to the following endpoint to create the required database tables:
-```
-http://localhost:5000/create-db
-```
 
-You can use tools like Postman or `curl` to make the request.
-
-### 5. Start the Celery Worker
+### 4. Start the Celery Worker
 In the second terminal, start the Celery worker with the following command:
 ```bash
 celery -A celery_worker.celery worker --concurrency=4 -l info
 ```
 
-### 6. Start the Celery Beat Scheduler
+### 5. Start the Celery Beat Scheduler
 In the third terminal, start the Celery beat scheduler to run periodic tasks:
 ```bash
 celery -A app.celery beat --loglevel=info
 ```
 
-### 7. Start Celery Flower
+### 6. Start Celery Flower
 In the fourth terminal, run Flower to monitor Celery tasks:
 ```bash
 celery -A celery_worker.celery flower
@@ -87,11 +93,22 @@ celery -A celery_worker.celery flower
 
 This will provide a web-based monitoring tool where you can track task failures, retries, successes, and worker activity.
 
-## Endpoints
+## System Architecture
 
-### Create Database Tables
-**URL:** `http://localhost:5000/create-db`  
-**Method:** `POST`
+The system leverages several powerful tools to handle background tasks, scheduling, and monitoring:
+
+1. **Celery for Asynchronous Task Processing**:  
+   Celery is used to manage background tasks asynchronously. This ensures that tasks such as sending notifications and reminders are processed without delaying the main application, leading to better performance and scalability.
+
+2. **Celery-Beat for Scheduling Frequent Tasks**:  
+   **Celery-Beat** is utilized for scheduling recurring tasks, such as periodic reminders and notifications. It enables tasks to be executed at regular intervals (e.g., hourly or daily), automating the process of sending updates to users.
+
+3. **Flower for Task Monitoring**:  
+   **Flower** provides real-time monitoring of Celery tasks. It offers a web-based interface where you can track the status of tasks, worker performance, and any failures, making it easier to manage and troubleshoot background operations.
+
+These components work together to ensure efficient task execution, reliable scheduling, and effective monitoring in the system.
+
+
 
 ## Notes
 - Ensure that Redis and PostgreSQL are properly set up and running before starting the application.
@@ -102,3 +119,7 @@ This will provide a web-based monitoring tool where you can track task failures,
 Use Flower to monitor the status of Celery tasks and workers:
 - Access Flower at `http://localhost:5555` (default port).
 
+
+![alt text]({BB7E31E1-FE2C-471C-A78B-1E635B30FD6B}.png)
+
+![alt text]({D229CC7A-BAB3-4DDF-92FB-03660D94741B}.png)
