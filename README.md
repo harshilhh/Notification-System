@@ -108,7 +108,9 @@ The system leverages several powerful tools to handle background tasks, scheduli
 
 These components work together to ensure efficient task execution, reliable scheduling, and effective monitoring in the system.
 
+## PostMan Collection
 
+[text](<c:/Users/Admin/Downloads/Notification System.postman_collection.json>)
 
 ## Notes
 - Ensure that Redis and PostgreSQL are properly set up and running before starting the application.
@@ -123,3 +125,5 @@ Use Flower to monitor the status of Celery tasks and workers:
 ![alt text]({BB7E31E1-FE2C-471C-A78B-1E635B30FD6B}.png)
 
 ![alt text]({D229CC7A-BAB3-4DDF-92FB-03660D94741B}.png)
+
+
